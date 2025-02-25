@@ -3707,6 +3707,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 .s-header__search-inner {
+    background-color: black;
     height: var(--header-height);
     width: 100%;
     -webkit-transform: translateY(-200%);
@@ -4245,10 +4246,6 @@ body.search-is-visible {
 
 .s-hero__social-icons a {
     color: white;
-}
-
-.s-hero__social-icon {
-  font-size: 16px;
 }
 
 .s-hero__social-icons a svg {
@@ -4948,6 +4945,7 @@ body.search-is-visible {
 .ss-go-top {
     z-index: 2;
     opacity: 0;
+    visibility: hidden;
     -webkit-transform: translate3d(0, 200%, 0);
     transform: translate3d(0, 200%, 0);
     -webkit-transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);

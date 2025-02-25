@@ -53,7 +53,7 @@ export default function Header() {
             </div>
 
             {/* Search Button */}
-            <button className="s-header__search-trigger">
+            <button>
                 <FaSearch size={20} />
             </button>
         </header>
