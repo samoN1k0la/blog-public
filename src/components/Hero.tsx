@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,11 +28,21 @@ const slides = [
 ];
 
 export default function Hero() {
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    };
+
     return (
         <section id="hero" className="s-hero">
             <div className="s-hero__slider">
                 {slides.map((slide, index) => (
-                    <div key={index} className="s-hero__slide">
+                    <div key={index} className={`s-hero__slide ${index === currentSlide ? "active" : "hidden"}`}>
                         <div className="s-hero__slide-bg" style={{ backgroundImage: `url(${slide.image})` }}></div>
                         <div className="row s-hero__slide-content">
                             <div className="column">
@@ -44,7 +56,7 @@ export default function Hero() {
                                     </span>
                                     <span className="byline">
                                         Posted by <span className="author">
-                                            <Link href="#">Nikola</Link>
+                                            <Link href="#">{slide.author}</Link>
                                         </span>
                                     </span>
                                 </div>
@@ -87,17 +99,29 @@ export default function Hero() {
 
             {/* Navigation Arrows */}
             <div className="nav-arrows s-hero__nav-arrows">
-                <button className="s-hero__arrow-prev">
+                <button className="s-hero__arrow-prev" onClick={prevSlide}>
                     <svg viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg" width="15" height="15">
                         <path d="M1.5 7.5l4-4m-4 4l4 4m-4-4H14" stroke="currentColor"></path>
                     </svg>
                 </button>
-                <button className="s-hero__arrow-next">
+                <button className="s-hero__arrow-next" onClick={nextSlide}>
                     <svg viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg" width="15" height="15">
                         <path d="M13.5 7.5l-4-4m4 4l-4 4m4-4H1" stroke="currentColor"></path>
                     </svg>
                 </button>
             </div>
+
+            <style jsx>{`
+                .s-hero__slide {
+                    display: none;
+                    opacity: 0;
+                    transition: opacity 0.5s ease-in-out;
+                }
+                .s-hero__slide.active {
+                    display: block;
+                    opacity: 1;
+                }
+            `}</style>
         </section>
     );
 }

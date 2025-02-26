@@ -8,7 +8,7 @@ const ContentSection = () => {
       author: "StyleShout",
       category: "Site Partner",
       image: "/images/thumbs/masonry/macbook-600.jpg",
-      link: "https://www.dreamhost.com/r.cgi?287326",
+      link: "blog-post",
       excerpt: "Need hosting? We highly recommend DreamHost...",
     },
     {
@@ -16,9 +16,25 @@ const ContentSection = () => {
       author: "Naruto Uzumaki",
       category: ["Design", "Photography"],
       image: "/images/thumbs/masonry/woodcraft-600.jpg",
-      link: "single-standard.html",
+      link: "blog-post",
       excerpt: "Lorem ipsum Sed eiusmod esse aliqua sed incididunt...",
-    }
+    },
+    {
+      title: "Second post",
+      author: "Naruto Uzumaki",
+      category: ["Design", "Photography"],
+      image: "/images/thumbs/masonry/woodcraft-600.jpg",
+      link: "blog-post",
+      excerpt: "Lorem ipsum Sed eiusmod esse aliqua sed incididunt...",
+    },
+    {
+      title: "Third post",
+      author: "Naruto Uzumaki",
+      category: ["Design", "Photography"],
+      image: "/images/thumbs/masonry/woodcraft-600.jpg",
+      link: "blog-post",
+      excerpt: "Lorem ipsum Sed eiusmod esse aliqua sed incididunt...",
+    },
   ];
 
   return (
