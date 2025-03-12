@@ -36,15 +36,6 @@ export default function Header() {
                                 <li><Link href="/category/relationship">Relationship</Link></li>
                             </ul>
                         </li>
-                        <li className="has-children">
-                            <a href="#" onClick={(e) => e.preventDefault()}>Blog</a>
-                            <ul className="sub-menu">
-                                <li><Link href="/blog/video">Video Post</Link></li>
-                                <li><Link href="/blog/audio">Audio Post</Link></li>
-                                <li><Link href="/blog/standard">Standard Post</Link></li>
-                            </ul>
-                        </li>
-                        <li><Link href="/styles">Styles</Link></li>
                         <li><Link href="/about">About</Link></li>
                         <li><Link href="/contact">Contact</Link></li>
                     </ul>

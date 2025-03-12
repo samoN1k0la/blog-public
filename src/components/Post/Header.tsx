@@ -28,15 +28,6 @@ const Header = () => {
                                 ))}
                             </ul>
                         </li>
-                        <li className="has-children current">
-                            <a href="#0">Blog</a>
-                            <ul className="sub-menu">
-                                <li><Link href="/single-video">Video Post</Link></li>
-                                <li><Link href="/single-audio">Audio Post</Link></li>
-                                <li><Link href="/single-standard">Standard Post</Link></li>
-                            </ul>
-                        </li>
-                        <li><Link href="/styles">Styles</Link></li>
                         <li><Link href="/about">About</Link></li>
                         <li><Link href="/contact">Contact</Link></li>
                     </ul>

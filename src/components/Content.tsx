@@ -1,90 +1,85 @@
-import Image from 'next/image';
-import Link from 'next/link';
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import axios from "axios";
+
+// Function to strip HTML tags and truncate the content
+const stripHtmlTags = (html: string): string => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+};
+
+const truncateText = (text: string, wordLimit: number = 20): string => {
+  const words = text.split(" ");
+  return words.length > wordLimit ? words.slice(0, wordLimit).join(" ") + "..." : text;
+};
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  author_id: number;
+  status: string;
+  hero_url: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const ContentSection = () => {
-  const posts = [
-    {
-      title: "Need Web Hosting for Your Websites?",
-      author: "StyleShout",
-      category: "Site Partner",
-      image: "/images/thumbs/masonry/macbook-600.jpg",
-      link: "blog-post",
-      excerpt: "Need hosting? We highly recommend DreamHost...",
-    },
-    {
-      title: "Just a Normal Simple Blog Post.",
-      author: "Naruto Uzumaki",
-      category: ["Design", "Photography"],
-      image: "/images/thumbs/masonry/woodcraft-600.jpg",
-      link: "blog-post",
-      excerpt: "Lorem ipsum Sed eiusmod esse aliqua sed incididunt...",
-    },
-    {
-      title: "Second post",
-      author: "Naruto Uzumaki",
-      category: ["Design", "Photography"],
-      image: "/images/thumbs/masonry/woodcraft-600.jpg",
-      link: "blog-post",
-      excerpt: "Lorem ipsum Sed eiusmod esse aliqua sed incididunt...",
-    },
-    {
-      title: "Third post",
-      author: "Naruto Uzumaki",
-      category: ["Design", "Photography"],
-      image: "/images/thumbs/masonry/woodcraft-600.jpg",
-      link: "blog-post",
-      excerpt: "Lorem ipsum Sed eiusmod esse aliqua sed incididunt...",
-    },
-  ];
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get<Post[]>("http://localhost:4000/posts/published");
+        setPosts(data.posts); // Assuming response body has 'posts' key
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <section className="s-content s-content--no-top-padding">
-      <div className="s-bricks">
-        <div className="masonry">
-          <div className="bricks-wrapper h-group">
-            {posts.map((post, index) => (
-              <article key={index} className="brick entry" data-aos="fade-up">
-                <div className="entry__thumb">
-                  <Link href={post.link} className="thumb-link">
-                    <Image
-                      src={post.image}
-                      alt={post.title}
-                      width={600}
-                      height={400}
-                      layout="responsive"
-                    />
-                  </Link>
-                </div>
-                <div className="entry__text">
-                  <div className="entry__header">
-                    <h1 className="entry__title">
-                      <Link href={post.link}>{post.title}</Link>
-                    </h1>
-                    <div className="entry__meta">
-                      <span className="byline">
-                        By: <span className="author"><Link href="#0">{post.author}</Link></span>
-                      </span>
-                      <span className="cat-links">
-                        {Array.isArray(post.category) ? (
-                          post.category.map((cat, i) => (
-                            <Link key={i} href="#0">{cat}</Link>
-                          ))
-                        ) : (
-                          <Link href="#0">{post.category}</Link>
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="entry__excerpt">
-                    <p>{post.excerpt}</p>
-                  </div>
-                  <Link className="entry__more-link" href={post.link}>Read More</Link>
-                </div>
-              </article>
-            ))}
+    <section className="posts-grid">
+      {posts.map((post) => (
+        <article key={post.id} className="post-card">
+          <div className="image-container">
+            {post.hero_url && (
+              <Link href={post.hero_url}>
+                <Image
+                  src={post.hero_url}
+                  alt={post.title}
+                  width={600}
+                  height={400}
+                />
+              </Link>
+            )}
           </div>
-        </div>
-      </div>
+          <div className="content">
+            <h1>
+              <Link href={`/posts/${post.id}`}>{post.title}</Link>
+            </h1>
+            <div className="meta">
+              <span>
+                By: <Link href="#0">Author {post.author_id}</Link>
+              </span>
+            </div>
+            <p>{truncateText(stripHtmlTags(post.content))}</p>
+            <Link href={`/posts/${post.id}`} className="read-more">
+              Read More
+            </Link>
+          </div>
+        </article>
+      ))}
     </section>
   );
 };

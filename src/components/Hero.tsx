@@ -1,58 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faTwitter, faInstagram, faDribbble } from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
 
-const slides = [
-    {
-        image: "/images/slide1-bg-3000.jpg",
-        categories: ["Lifestyle", "Design"],
-        author: "Jonathan Doe",
-        title: "Tips and Ideas to Help You Start Freelancing.",
-    },
-    {
-        image: "/images/slide2-bg-3000.jpg",
-        categories: ["Work"],
-        author: "Juan Dela Cruz",
-        title: "Minimalism: The Art of Keeping It Simple.",
-    },
-    {
-        image: "/images/slide3-bg-3000.jpg",
-        categories: ["Health", "Lifestyle"],
-        author: "Jane Doe",
-        title: "10 Reasons Why Being in Nature Is Good For You.",
-    },
-];
+interface HeroPost {
+    id: string;
+    title: string;
+    author_id: string;
+    hero_url: string;
+}
 
 export default function Hero() {
+    const [heroes, setHeroes] = useState<HeroPost[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
 
+    useEffect(() => {
+      const fetchHeroes = async () => {
+        try {
+          const response = await axios.get<{ posts: HeroPost[] }>("http://localhost:4000/posts/heroes");
+          setHeroes(response.data.posts);
+        } catch (error) {
+          console.error("Error fetching heroes:", error);
+        }
+      };
+
+      fetchHeroes();
+    }, []);
+
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
+        setCurrentSlide((prev) => (prev + 1) % heroes.length);
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+        setCurrentSlide((prev) => (prev - 1 + heroes.length) % heroes.length);
     };
 
     return (
         <section id="hero" className="s-hero">
             <div className="s-hero__slider">
-                {slides.map((slide, index) => (
-                    <div key={index} className={`s-hero__slide ${index === currentSlide ? "active" : "hidden"}`}>
-                        <div className="s-hero__slide-bg" style={{ backgroundImage: `url(${slide.image})` }}></div>
+                {heroes.map((slide, index) => (
+                    <div key={slide.id} className={`s-hero__slide ${index === currentSlide ? "active" : "hidden"}`}>
+                        <div className="s-hero__slide-bg" style={{ backgroundImage: `url(${slide.hero_url})` }}></div>
                         <div className="row s-hero__slide-content">
                             <div className="column">
                                 <div className="s-hero__slide-meta">
                                     <span className="cat-links">
-                                        {slide.categories.map((cat, i) => (
+                                        {/*slide.categories.map((cat, i) => (
                                             <Link key={i} href="#">
                                                 {cat}
                                             </Link>
-                                        ))}
+                                        ))*/}
                                     </span>
                                     <span className="byline">
                                         Posted by <span className="author">
